@@ -1,13 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
- 
+export async function GET() {
+	try {
+		const response = await fetch("https://swapi.dev/api/people/");
+		if (!response.ok) throw new Error("Failed to fetch Star Wars data");
 
-  const response = await fetch("https://swapi.dev/api/");
-  const data = await response.json();
-  console.log('====================================');
-  console.log(data.results);
-  console.log('====================================');
-
-  return NextResponse.json(data.results);
+		const data = await response.json();
+		return NextResponse.json(data.results);
+	} catch (error) {
+		return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+	}
 }
